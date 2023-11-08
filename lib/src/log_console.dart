@@ -31,8 +31,10 @@ class LogConsole extends StatefulWidget {
   static bool _initialized = false;
   static final _newLogs = ChangeNotifier();
 
-  LogConsole({this.dark = false, this.showCloseButton = false})
-      : assert(_initialized, 'Please call LogConsole.init() first.');
+  ///USED IN "logger class" to check if log console opened. Set to "false" when clicking on the "X" button at the top right corner
+  static bool opened = false;
+
+  LogConsole({super.key, this.dark = false, this.showCloseButton = false}) : assert(_initialized, 'Please call LogConsole.init() first.');
 
   /// Attach this LogOutput to your logger instance:
   /// `
@@ -72,6 +74,7 @@ class LogConsole extends StatefulWidget {
       showCloseButton: true,
       dark: Theme.of(context).brightness == Brightness.dark,
     );
+    // ignore: strict_raw_type
     PageRoute route;
     route = MaterialPageRoute(builder: (_) => logConsole);
 
@@ -107,8 +110,7 @@ class _LogConsoleState extends State<LogConsole> {
 
     _scrollController.addListener(() {
       if (!_scrollListenerEnabled) return;
-      var scrolledToBottom = _scrollController.offset >=
-          _scrollController.position.maxScrollExtent;
+      var scrolledToBottom = _scrollController.offset >= _scrollController.position.maxScrollExtent;
       setState(() {
         _followBottom = scrolledToBottom;
       });
@@ -187,9 +189,9 @@ class _LogConsoleState extends State<LogConsole> {
         ),
         floatingActionButton: AnimatedOpacity(
           opacity: _followBottom ? 0 : 1,
-          duration: Duration(milliseconds: 150),
+          duration: const Duration(milliseconds: 150),
           child: Padding(
-            padding: EdgeInsets.only(bottom: 60),
+            padding: const EdgeInsets.only(bottom: 60),
             child: FloatingActionButton(
               mini: true,
               clipBehavior: Clip.antiAlias,
@@ -237,16 +239,16 @@ class _LogConsoleState extends State<LogConsole> {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          Text(
+          const Text(
             'Log Console',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
-          Spacer(),
+          const Spacer(),
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () {
               setState(() {
                 _logFontSize++;
@@ -254,7 +256,7 @@ class _LogConsoleState extends State<LogConsole> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.remove),
+            icon: const Icon(Icons.remove),
             onPressed: () {
               setState(() {
                 _logFontSize--;
@@ -263,9 +265,10 @@ class _LogConsoleState extends State<LogConsole> {
           ),
           if (widget.showCloseButton)
             IconButton(
-              icon: Icon(Icons.close),
+              icon: const Icon(Icons.close),
               onPressed: () {
                 Navigator.pop(context);
+                LogConsole.opened = false;
               },
             ),
         ],
@@ -281,19 +284,19 @@ class _LogConsoleState extends State<LogConsole> {
         children: <Widget>[
           Expanded(
             child: TextField(
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
               controller: _filterController,
               onChanged: (s) => _refreshFilter(),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Filter log output',
                 border: OutlineInputBorder(),
               ),
             ),
           ),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           DropdownButton(
             value: _filterLevel,
-            items: [
+            items: const [
               DropdownMenuItem(
                 child: Text('VERBOSE'),
                 value: Level.verbose,
@@ -339,7 +342,7 @@ class _LogConsoleState extends State<LogConsole> {
     var scrollPosition = _scrollController.position;
     await _scrollController.animateTo(
       scrollPosition.maxScrollExtent,
-      duration: Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 400),
       curve: Curves.easeOut,
     );
 
@@ -366,7 +369,7 @@ class LogBar extends StatelessWidget {
   final bool dark;
   final Widget child;
 
-  LogBar({this.dark = false, required this.child});
+  const LogBar({super.key, this.dark = false, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -385,7 +388,7 @@ class LogBar extends StatelessWidget {
         child: Material(
           color: dark ? Colors.blueGrey[900] : Colors.white,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(15, 8, 15, 8),
+            padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
             child: child,
           ),
         ),
