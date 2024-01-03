@@ -13,13 +13,13 @@ class _WrappedOutput implements LogOutput {
   }
 
   @override
-  void destroy() {
-    innerLogOutput.destroy();
+  Future<void> destroy() {
+    return innerLogOutput.destroy();
   }
 
   @override
-  void init() {
-    innerLogOutput.init();
+  Future<void> init() {
+    return innerLogOutput.init();
   }
 }
 

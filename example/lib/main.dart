@@ -26,7 +26,7 @@ void log() {
 
   loggerNoStack.w("Just a warning!");
 
-  logger.e("Error! Something bad happened", "Test Error");
+  logger.e("Error! Something bad happened");
 
   loggerNoStack.v({"key": 5, "value": "something"});
 
